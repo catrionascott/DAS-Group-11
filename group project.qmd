@@ -1,0 +1,171 @@
+---
+title: "Obesity Prevalence in Scotland (2013–2016)"
+author: "Group 11"
+execute: 
+  echo: false
+  eval: true
+number-sections: true
+format:
+  html:
+    embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)    
+library(ggplot2)      
+library(performance)
+library(skimr)        
+library(sjPlot)
+library(kableExtra)   
+```
+
+# Introduction {#sec-intro}
+
+Obesity is a major public health issue and has been linked to a range of chronic health conditions, including cardiovascular disease and diabetes. Monitoring obesity prevalence and identifying population groups at higher risk are therefore important for informing public health strategies and interventions.
+
+This study analyses data from the Scottish Health Survey covering the period from 2013 to 2016. The dataset provides demographic and socio-economic information that allows an investigation of patterns in obesity prevalence across different segments of the population.
+
+The main objective of this analysis is to examine whether the prevalence of obesity in Scotland changed during this period and to explore whether obesity rates differ across demographic characteristics such as age, sex, and employment status. To address these questions, we first conduct an exploratory analysis to identify potential patterns in the data. This is followed by a formal statistical analysis using a logistic regression model to assess the relationship between obesity and the explanatory variables.
+
+```{r}
+library(tidyverse)
+
+data <- read.csv("DAProject11.csv")
+```
+
+# Exploratory Analysis {#sec-EA}
+
+Before conducting formal statistical modelling, an exploratory analysis was performed to understand the distribution of obesity within the data-set and to identify potential patterns across demographic groups.
+
+## Creating Obesity Indicator
+
+A binary obesity variable is created from the **BMIgroup** variable.
+
+```{r}
+data <- data %>%
+mutate(
+Obese = ifelse(BMIgroup == "Obese",1,0)
+)
+```
+
+## Obesity Prevalence by Year
+
+To examine whether obesity prevalence has changed between 2013 and 2016, the proportion of individuals classified as obese was calculated for each survey year.
+
+```{r}
+obesity_year <- data %>%
+  group_by(Year) %>%
+  summarise(
+    prevalence = mean(Obese)
+  )
+
+ggplot(obesity_year, aes(x = Year, y = prevalence)) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Obesity prevalence in Scotland (2013–2016)",
+    y = "Obesity prevalence",
+    x = "Year"
+  )
+
+```
+
+The plot suggests that obesity prevalence remains relatively stable across the years, with only small fluctuations observed between survey periods. This indicates that there may not be a strong temporal trend in obesity prevalence during the study period.
+
+## Obesity by Sex
+
+```{r}
+ggplot(data, aes(x = Sex, fill = factor(Obese))) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Obesity prevalence by sex",
+    y = "Proportion",
+    fill = "Obese"
+  )
+```
+
+The distribution of obesity across males and females was also examined. The visualisation shows that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
+
+## Obesity by Age Group
+
+```{r}
+ggplot(data, aes(x = AgeGroup, fill = factor(Obese))) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Obesity prevalence by age group",
+    y = "Proportion",
+    fill = "Obese"
+  )
+```
+
+Substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
+
+## Obesity by Employment Status
+
+```{r}
+ggplot(data, aes(x = Employment, fill = factor(Obese))) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Obesity prevalence by employment status",
+    y = "Proportion",
+    fill = "Obese"
+  )
+```
+
+Differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
+
+Overall, the exploratory analysis highlights potential relationships between obesity prevalence and several demographic characteristics. These patterns will be formally tested in the following section using statistical modelling.
+
+# Formal Analysis {#sec-FA}
+
+To formally examine the determinants of obesity, we estimate a **logistic regression model** where the probability of being obese depends on demographic characteristics and survey year.
+
+```{r}
+#|echo: false
+model <- glm(
+  Obese ~ Year + Sex + AgeGroup + Employment,
+  data = data,
+  family = binomial
+)
+
+tab_model(model)
+```
+
+The logistic regression model allows us to estimate how different factors influence the likelihood of obesity.
+
+Key findings include:
+
+-    The coefficient for **Year** indicates whether obesity prevalence has increased or decreased over time.
+
+-   Differences between **Sex** categories indicate whether obesity risk varies between males and females.
+
+-    **Age-Group** coefficients capture differences across age ranges.
+
+-   **Employment status** may reflect social economic influences on obesity risk.
+
+-    Odds ratios provide an interpretation in terms of relative risk.
+
+```{r}
+exp(coef(model))
+```
+
+These values represent the multiplicative change in the odds of obesity associated with each predictor.
+
+```{r}
+chisq.test(table(data$Sex,data$Obese))
+```
+
+# Conclusions {#sec-con}
+
+This analysis investigated obesity prevalence in Scotland using data from the Scottish Health Survey (2013–2016).
+
+The exploratory analysis showed variation in obesity prevalence across demographic groups, particularly across different age groups and employment categories.
+
+The logistic regression model confirmed that demographic characteristics are associated with obesity risk. These findings suggest that obesity is not evenly distributed across the population and may be influenced by social and economic and demographic factors.
+
+Future work could extend this analysis by incorporating additional lifestyle variables such as diet, physical activity, or income levels. Analysing more recent survey data would also help determine whether the observed patterns persist over time.
