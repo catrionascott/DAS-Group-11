@@ -125,6 +125,18 @@ Overall, the exploratory analysis highlights potential relationships between obe
 
 To formally examine the determinants of obesity, we estimate a **logistic regression model** where the probability of being obese depends on demographic characteristics and survey year.
 
+$$
+\text{logit}(P(\text{Obese}=1)) =
+\beta_0 +
+\beta_1 Year +
+\beta_2 Sex +
+\beta_3 AgeGroup +
+\beta_4 Employment
+$$
+
+where $P(\text{Obese}=1)$represents the probability that an individual is classified as obese.
+The coefficients represent the change in the log-odds of obesity associated with each explanatory variable. The model was estimated using logistic regression in R.
+
 ```{r}
 #|echo: false
 model <- glm(
@@ -169,3 +181,4 @@ The exploratory analysis showed variation in obesity prevalence across demograph
 The logistic regression model confirmed that demographic characteristics are associated with obesity risk. These findings suggest that obesity is not evenly distributed across the population and may be influenced by social and economic and demographic factors.
 
 Future work could extend this analysis by incorporating additional lifestyle variables such as diet, physical activity, or income levels. Analysing more recent survey data would also help determine whether the observed patterns persist over time.
+
