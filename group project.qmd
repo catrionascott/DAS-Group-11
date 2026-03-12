@@ -125,40 +125,81 @@ Overall, the exploratory analysis highlights potential relationships between obe
 
 To formally examine the determinants of obesity, we estimate a **logistic regression model** where the probability of being obese depends on demographic characteristics and survey year.
 
+$$
+\text{logit}(P(\text{Obese}=1)) =
+\beta_0 +
+\beta_1 Year +
+\beta_2 {\mathrm{Male}} \cdot \mathbb{I}_{\mathrm{Male}}(x) +
+\beta_3 AgeGroup +
+\beta_4 Employment
+$$
+
+$$
+\mathbb{I}_{\mathrm{Male}}(x) =
+\begin{cases} 
+1 ~ \text{if the gender of the }x\text{th observation is Male},\\
+0 ~ \text{otherwise}
+\end{cases}
+$$
+
+where $P(\text{Obese}=1)$represents the probability that an individual is classified as obese.
+The intercept $( \beta_0 )$ represents the baseline log-odds of obesity when all explanatory variables are at their reference levels. The coefficients ( $\beta_1$, $\beta_2$, $\beta_3$ ) and ( $\beta_4$ ) measure the change in the log-odds of obesity associated with a one-unit change in the corresponding predictor or relative to a reference category.
+The coefficients represent the change in the log-odds of obesity associated with each explanatory variable. The model was estimated using logistic regression in R.
+
 ```{r}
 #|echo: false
+#|message: false
 model <- glm(
   Obese ~ Year + Sex + AgeGroup + Employment,
   data = data,
   family = binomial
 )
 
-tab_model(model)
+tab_model(model, show.ci = TRUE)
 ```
 
-The logistic regression model allows us to estimate how different factors influence the likelihood of obesity.
+The fitted logistic regression model allows us to examine how the probability of being classified as obese varies with demographic and social-economic factors.
 
-Key findings include:
+-   The intercept $\beta_0$ represents the log-odds of obesity for the baseline categories: survey year 2013, females, the youngest age group, and the employed category.
 
--    The coefficient for **Year** indicates whether obesity prevalence has increased or decreased over time.
+-   The coefficient for Year $(\beta_1)$ indicates the change in log-odds of obesity for each subsequent survey year compared with 2013.
 
--   Differences between **Sex** categories indicate whether obesity risk varies between males and females.
+-   The coefficient for Sex $(\beta_2​)$ represents the difference in log-odds of obesity for males relative to females; the odds ratio can be interpreted as the multiplicative change in the odds of obesity for males.
 
--    **Age-Group** coefficients capture differences across age ranges.
+-   Age-Group coefficients $(\beta_3)$ show how the log-odds of obesity differ across age ranges relative to the youngest age group.
 
--   **Employment status** may reflect social economic influences on obesity risk.
+-   Employment status $(\beta_4​)$ captures differences in obesity risk by employment, reflecting potential social-economic influences.
 
--    Odds ratios provide an interpretation in terms of relative risk.
-
-```{r}
-exp(coef(model))
-```
-
-These values represent the multiplicative change in the odds of obesity associated with each predictor.
+-   Table presents the estimated odds ratios and confidence intervals for all predictors. These results provide a clear interpretation of how each factor affects the likelihood of obesity, allowing us to quantify differences between groups.
 
 ```{r}
 chisq.test(table(data$Sex,data$Obese))
 ```
+
+To further investigate the relationship between obesity and sex, a chi-square test of independence was performed. This test examines whether obesity status is associated with gender in the sample.
+
+{r}
+#| fig-align: center
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: Scatterplots of the deviance residuals by gender (left) and a histogram of the residuals (right).
+#| label: fig-resids
+#| echo: false
+#| message: false
+
+library(performance)
+library(see)
+
+check_model(model, residual_type = "deviance", check = c("linearity","outliers"))
+
+Figure shows deviance residuals for the logistic regression model. The scatterplot by gender (left) and the histogram of residuals (right) indicate that there are no major violations of model assumptions. The residuals appear reasonably distributed, and no influential outliers are detected.
+The regression results indicate that age group is strongly associated with obesity risk. Individuals in older age groups tend to have higher odds of being classified as obese compared with younger individuals.
+
+Differences between males and females are also observed, suggesting that gender may influence obesity prevalence. However, the magnitude of this effect appears relatively modest.
+
+Employment status may also play a role in obesity prevalence, potentially reflecting differences in social-economic circumstances and lifestyle behaviors.
+
+The coefficient associated with survey year provides information about whether obesity prevalence has changed over time. The results suggest that there is limited evidence of a strong trend in obesity prevalence between 2013 and 2016.
 
 # Conclusions {#sec-con}
 
@@ -169,3 +210,4 @@ The exploratory analysis showed variation in obesity prevalence across demograph
 The logistic regression model confirmed that demographic characteristics are associated with obesity risk. These findings suggest that obesity is not evenly distributed across the population and may be influenced by social and economic and demographic factors.
 
 Future work could extend this analysis by incorporating additional lifestyle variables such as diet, physical activity, or income levels. Analysing more recent survey data would also help determine whether the observed patterns persist over time.
+
