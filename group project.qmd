@@ -179,13 +179,13 @@ The coefficients represent the change in the log-odds of obesity associated with
 #|echo: false
 #|message: false
 
-model <- glm(
+model3 <- glm(
   Obese ~ Year + Sex + AgeGroup + Employment,
   data = data,
   family = binomial
 )
 
-tab_model(model, show.ci = TRUE)
+tab_model(model3, show.ci = TRUE)
 ```
 
 The fitted logistic regression model allows us to examine how the probability of being classified as obese varies with demographic and social-economic factors.
@@ -220,7 +220,7 @@ To further investigate the relationship between obesity and sex, a chi-square te
 library(performance)
 library(see)
 
-check_model(model, residual_type = "deviance", check = c("linearity","outliers"))
+check_model(model3, residual_type = "deviance", check = c("linearity","outliers"))
 ```
 
 Figure shows deviance residuals for the logistic regression model. The scatterplot by gender (left) and the histogram of residuals (right) indicate that there are no major violations of model assumptions. The residuals appear reasonably distributed, and no influential outliers are detected.
