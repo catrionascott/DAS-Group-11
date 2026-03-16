@@ -123,6 +123,33 @@ Overall, the exploratory analysis highlights potential relationships between obe
 
 # Formal Analysis {#sec-FA}
 
+Model 1: Time trend in obesity
+
+The first model examines whether the prevalence of obesity changed over the survey years.
+
+{r}
+#| echo: false 
+model1 <- glm(Obese ~ Year, data = data, family = binomial) 
+tab_model(model1, show.ci = TRUE)
+
+This model estimates the association between survey year and the probability of being classified as obese. A significant coefficient for Year would indicate that obesity prevalence has changed over time.
+
+Model 2: Demographic and socio-economic factors
+
+The second model examines whether obesity prevalence differs across demographic and socio-economic groups.
+
+{r}
+#| echo: false 
+data$AgeGroup <- as.factor(data$AgeGroup) 
+data$Sex <- as.factor(data$Sex) 
+data$Employment <- as.factor(data$Employment) 
+model2 <- glm(Obese ~ AgeGroup + Sex + Employment, data = data, family = binomial) 
+tab_model(model2, show.ci = TRUE)
+
+This model evaluates whether obesity prevalence varies by age group, sex, and employment status. These variables are treated as categorical predictors in the logistic regression.
+
+Model 3: Full model
+
 To formally examine the determinants of obesity, we estimate a **logistic regression model** where the probability of being obese depends on demographic characteristics and survey year.
 
 $$
