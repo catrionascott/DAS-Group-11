@@ -65,7 +65,7 @@ $$ Where $p = \mathrm{Prob(Obese)}$ and $1-p =\mathrm{Prob(Not~ obese)}$
 
 The odds ratio of 1.01 means the odds of being obese increase by 1% per year. The p-value for this predictor is 0.736 which is much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So there is no statistcal evidence that obesity prevalence changed between 2013 and 2016. 
 
-To determine if there are any differences in obesity by age, gender, socio-economic status or life-style factors a logistic model is created with obesity as a binary outcome and age group, gender, and employment as the predictors.
+To determine if there are any differences in obesity by age, gender, socio-economic status or life-style factors a logistic model is created with obesity as a binary outcome, using age group, gender, and employment as the predictors with a reference category of *16-24* for age group and *Doing something else* for employment.
 
 ```{r}
 data$AgeGroup <- as.factor(data$AgeGroup)
@@ -81,7 +81,7 @@ model2 %>%
   tab_model(show.ci = F)
 ```
 
-The results from @tbl-model2 allow the odds to be compared for each predictor. For age, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group. Men had slightly lower odds of obesity than woman, with an odds ratio of 0.9,although small, the difference appears to be significant. For the employment categories, those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and certain socio-economic factors are associated with differences in obesity prevalence, while select employment categories show non-significant effects. 
+The results from @tbl-model2 allow the odds to be compared for each predictor. For age, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group which has an odds ratio of 0.22. Men had slightly lower odds of obesity than woman, with an odds ratio of 0.9,although small, the difference appears to be significant. For the employment categories, those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and certain socio-economic factors are associated with differences in obesity prevalence, while select employment categories show non-significant effects. 
 
 # Conclusions {#sec-con}
 
