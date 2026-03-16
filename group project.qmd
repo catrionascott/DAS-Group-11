@@ -25,16 +25,11 @@ library(kableExtra)
 ```
 
 # Introduction {#sec-intro}
+There are many factors that may contribute to obesity. The Scotish health survey provides data on socio-economic and lifestyle factors from 2013-2016 that may explain causes of obesity. The variables include age group, gender, employment status,year, and BMI group. Age group categories are *16-24*, *25-34*, *35-44*, *45-54*,*55-64*,*65-74*, and *75+*. Employment status categories are *doing something else*, *in full time education*, *in paid employment, self-employes or in government training*, *looking after home/family*, *looking for/intending to look for paid work*, *permanently unable to work*, and *retired*. In this report, we will analyse the relationship between obesity prevalence and time, and investigate whether age, gender, or employment status are associated with differences in obesity prevalence 
 
-Obesity is a major public health issue and has been linked to a range of chronic health conditions, including cardiovascular disease and diabetes. Monitoring obesity prevalence and identifying population groups at higher risk are therefore important for informing public health strategies and interventions.
-
-This study analyses data from the Scottish Health Survey covering the period from 2013 to 2016. The dataset provides demographic and socio-economic information that allows an investigation of patterns in obesity prevalence across different segments of the population.
-
-The main objective of this analysis is to examine whether the prevalence of obesity in Scotland changed during this period and to explore whether obesity rates differ across demographic characteristics such as age, sex, and employment status. To address these questions, we first conduct an exploratory analysis to identify potential patterns in the data. This is followed by a formal statistical analysis using a logistic regression model to assess the relationship between obesity and the explanatory variables.
-
+@sec-EA consists of an exploratory analysis of the Scottish health survey (2013 - 2016) and examines the potential relationship between obesity and time as well as the influence of age, employment, or gender on obesity prevalence. @sec-FA contains results from fitting two logistic regression models: the first evaluating whether obesity prevalence changes year to year, and the second assessing the effect age, employment or gender have on prevelance. Concluding remarks are given in @sec-con.
 ```{r}
 library(tidyverse)
-
 data <- read.csv("DAProject11.csv")
 ```
 
@@ -201,12 +196,6 @@ The fitted logistic regression model allows us to examine how the probability of
 -   Employment status $(\beta_4​)$ captures differences in obesity risk by employment, reflecting potential social-economic influences.
 
 -   Table presents the estimated odds ratios and confidence intervals for all predictors. These results provide a clear interpretation of how each factor affects the likelihood of obesity, allowing us to quantify differences between groups.
-
-```{r}
-chisq.test(table(data$Sex,data$Obese))
-```
-
-To further investigate the relationship between obesity and sex, a chi-square test of independence was performed. This test examines whether obesity status is associated with gender in the sample.
 
 ```{r}
 #| fig-align: center
