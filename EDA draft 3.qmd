@@ -93,6 +93,8 @@ Next we look to see if there are any differences in obesity by age, gender, soci
 ```{r}
 #| fig-width: 12
 #| fig-height: 8
+#| label: fig-2
+#| fig-cap: "Graph of Obesity Prevalence by Sex, Age and Employment status"
 
 library(tidyverse)
 
@@ -129,15 +131,19 @@ q2 <- ggplot(long_data, aes(x = Category, y = Obese, fill = Variable)) +
 q2
 ```
 
-Figure 2 indicates that age is associated with differences in obesity prevalence. Obesity rates appear to increase progressively across the younger and middle age groups, reaching their highest levels in the *65–74* category, before declining slightly in the *75+* group.
+@fig-2 indicates that age is associated with differences in obesity prevalence. Obesity rates appear to increase progressively across the younger and middle age groups, reaching their highest levels in the *65–74* category, before declining slightly in the *75+* group.
 
-The plot also suggests small differences between sexes, with females exhibiting slightly higher obesity rates on average than males.
+@fig-2 also suggests small differences between sexes, with females exhibiting slightly higher obesity rates on average than males.
 
 Finally, the figure indicates that employment status is related to obesity prevalence. Individuals in the categories “*Looking after home/family*” and “*Retired*” show comparatively higher obesity rates than those in other employment categories.
 
 ```{r}
 #| fig-width: 15
 #| fig-height: 8
+#|label:fig-3
+#|fig-cap: "Obesity Prevalence by Age Group and Sex"
+#|lable: fig-4
+#| fig-cap: "Graph of Obesity Prevalence by Employment and Sex"
 
 p1<- ggplot(data, aes(x = AgeGroup, y = Obese, fill = Sex)) +
   stat_summary(fun = mean, geom = "bar", position = "dodge") +
@@ -161,22 +167,28 @@ p2 <- ggplot(data, aes(x = Employment, y = Obese, fill = Sex)) +
     theme(legend.position = "bottom")
 ```
 
-Figure 3 shows that obesity prevalence differ slightly between males and females across age groups. In most age groups up to and including *45–54*, as well as in the *75+* category, females exhibit higher obesity rates than males. In contrast, in the *55–64* age group, males have a higher obesity rate than females. For individuals aged *65–74*, the obesity rates for males and females are very similar, with little difference between the two groups.
+@fig-3 shows that obesity prevalence differ slightly between males and females across age groups. In most age groups up to and including *45–54*, as well as in the *75+* category, females exhibit higher obesity rates than males. In contrast, in the *55–64* age group, males have a higher obesity rate than females. For individuals aged *65–74*, the obesity rates for males and females are very similar, with little difference between the two groups.
 
-Figure 4 show that obesity rates vary across categories and between sexes. In most emploment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate.
+@fig-4 show that obesity rates vary across categories and between sexes. In most emploment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate.
 
-Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in Figure 3 (one 2 above), where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
+Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in @fig-3, where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
 
 #### Obesity by Sex, Age Group or Employment Status
 
 ```{r}
 #| fig-width: 15
 #| fig-height: 8
+#| label: fig-5
+#| fig-cap:"Graph of Obesity prevalence by Sex"
+#| label: fig-6
+#| fig-cap:"Graph of Obesity prevalence by Age"
+#| label: fig-7
+#| fig-cap:"Graph of Obesity prevalence by Employment Status"
 
 r1 <- ggplot(data, aes(x = Sex, fill = factor(ObeseRate))) +
   geom_bar(position = "fill") +
   labs(
-    title = "Figure 5: Obesity prevalence by sex",
+    title = "Figure 5: Obesity prevalence by Sex",
     y = "Proportion",
     fill = "ObeseRate"
   )
@@ -185,7 +197,7 @@ r2 <-
 ggplot(data, aes(x = AgeGroup, fill = factor(ObeseRate))) +
   geom_bar(position = "fill") +
   labs(
-    title = "Figure 6: Obesity prevalence by age group",
+    title = "Figure 6: Obesity prevalence by Age Group",
     y = "Proportion",
     fill = "ObeseRate"
   )
@@ -193,7 +205,7 @@ ggplot(data, aes(x = AgeGroup, fill = factor(ObeseRate))) +
 r3 <-  ggplot(data, aes(x = Employment, fill = factor(ObeseRate))) +
   geom_bar(position = "fill") +
   labs(
-    title = "Figure 7: Obesity prevalence by employment status",
+    title = "Figure 7: Obesity prevalence by Employment Status",
     y = "Proportion",
     fill = "ObeseRate"
   ) + guides(x = guide_axis(angle = 40))
@@ -203,15 +215,17 @@ r3 <-  ggplot(data, aes(x = Employment, fill = factor(ObeseRate))) +
     theme(legend.position = "bottom")
 ```
 
-The distribution of obesity across males and females was also examined. The visualisation findings in Figure 5 show that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
+The distribution of obesity across males and females was also examined. The visualisation findings in @fig-5 show that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
 
-Figure 6 demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
+@fig-6 demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
 
-Figure 7 shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
+@fig-7 shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
 
 #### Obesity Prevalence by Sex, Age and Employment Status
 
 ```{r}
+#| label: tbl-2
+#| tbl-cap:"Table of Obesity prevalence by sex, age group, and employment status"
 library(dplyr)
 library(knitr)
 
@@ -237,19 +251,21 @@ kable(
   table_data,
   digits = 3,
   col.names = c("Variable", "Category", "Obesity Prevalence"),
-  caption = "Table 2: Obesity prevalence by sex, age group, and employment status"
+  caption = "Table 2: Obesity prevalence by Sex, Age Group, and Employment Status"
 )
 ```
 
-Table 2 shows that obesity prevalence is slightly higher among females, with an obesity rate of 0.351, compared with 0.291 among males.
+@tbl-2 shows that obesity prevalence is slightly higher among females, with an obesity rate of 0.351, compared with 0.291 among males.
 
-Table 2 also indicates that the *16–24* age group has the lowest obesity rate. Obesity prevalence increases progressively with age, reaching a peak in the *65–74* age group, before declining slightly in the *75+* age group.
+@tbl-2 also indicates that the *16–24* age group has the lowest obesity rate. Obesity prevalence increases progressively with age, reaching a peak in the *65–74* age group, before declining slightly in the *75+* age group.
 
-Table 2 further shows variation by employment status. Individuals in *full-time employmen*t have the lowest obesity rate (0.160), while those *permanently unable to work* exhibit the highest rate (0.426).
+@tbl-2 further shows variation by employment status. Individuals in *full-time employmen*t have the lowest obesity rate (0.160), while those *permanently unable to work* exhibit the highest rate (0.426).
 
 #### BMI Distribution by Demographic and Socio-Economic factors
 
 ```{r}
+#| label: fig-8
+#| fig-cap:"Graph of BMI Distribution by Demographic and Socio-economic Factors"
 library(tidyverse)
 
 plot_data <- data %>%
@@ -268,8 +284,8 @@ ggplot(plot_data, aes(x = category, fill = BMIgroup)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Figure 8 shows the proportion of individuals who fall into each BMI group against Age, Employment status and Sex. It indicates that indivduals in the !In full-time employment" category have the lowest obesity rate, whilst those in ""Permanently unable to work exhibit the highest obesity rate.
+@fig-8 shows the proportion of individuals who fall into each BMI group against Age, Employment status and Sex. It indicates that indivduals in the !In full-time employment" category have the lowest obesity rate, whilst those in ""Permanently unable to work exhibit the highest obesity rate.
 
-Figure 8 also shows that the second oldest age group (65-74) have the highest rate of obesity, whilst the youngest age group (16-24) has the lowest rate. the plot also demonstrates that females have a slightly higher obesity rate than males.
+@fig-8 also shows that the second oldest age group (65-74) have the highest rate of obesity, whilst the youngest age group (16-24) has the lowest rate. the plot also demonstrates that females have a slightly higher obesity rate than males.
 
 Overall, the exploratory analysis highlights potential relationships between obesity prevalence and several demographic characteristics. These patterns will be formally tested in the following section using statistical modelling.
