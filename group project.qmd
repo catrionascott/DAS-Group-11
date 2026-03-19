@@ -25,12 +25,13 @@ library(skimr)
 library(sjPlot)
 library(kableExtra) 
 library(nnet)
+library(see)
 ```
 
 # Introduction {#sec-intro}
-There are many factors that may contribute to obesity. The Scotish health survey provides data on socio-economic and lifestyle factors from 2013-2016 that may explain causes of obesity. The variables include age group, gender, employment status,year, and BMI group. Age group categories are *16-24*, *25-34*, *35-44*, *45-54*,*55-64*,*65-74*, and *75+*. Employment status categories are *doing something else*, *in full time education*, *in paid employment, self-employes or in government training*, *looking after home/family*, *looking for/intending to look for paid work*, *permanently unable to work*, and *retired*. In this report, we will analyse the relationship between obesity prevalence and time, and investigate whether age, gender, or employment status are associated with differences in obesity prevalence 
+There are many factors that may contribute to obesity. The Scottish health survey provides data on socio-economic and lifestyle factors from 2013-2016 that may be associated with obesity. The variables include age group, gender, employment status,year, and BMI group. Age group categories are *16-24*, *25-34*, *35-44*, *45-54*,*55-64*,*65-74*, and *75+*. Employment status categories are *Doing something else*, *In full time education*, *In paid employment, self-employed or in government training*, *Looking after home/family*, *Looking for/intending to look for paid work*, *Permanently unable to work*, and *Retired*. In this report, we will analyse the relationship between obesity prevalence and time, and investigate whether age, gender, or employment status are associated with differences in obesity prevalence 
 
-@sec-EA consists of an exploratory analysis of the Scottish health survey (2013 - 2016) and examines the potential relationship between obesity and time as well as the influence of age, employment, or gender on obesity prevalence. @sec-FA contains results from fitting two logistic regression models: the first evaluating whether obesity prevalence changes year to year, and the second assessing the effect age, employment or gender have on prevelance. Concluding remarks are given in @sec-con.
+@sec-EA consists of an exploratory analysis of the Scottish health survey (2013 - 2016) and examines the potential relationship between obesity and time as well as the influence of age, employment, or gender on obesity prevalence. @sec-FA contains results from fitting two logistic regression models: the first evaluating whether obesity prevalence changes year to year, and the second assessing the effect age, employment, or gender have on prevalence. Concluding remarks are given in @sec-con.
 ```{r}
 library(tidyverse)
 data <- read.csv("DAProject11.csv")
@@ -51,19 +52,31 @@ Obese = ifelse(BMIgroup == "Obese",1,0)
 To determine if the prevalence of obesity in Scotland changed from 2013 to 2016 a logistic regression model is created.
 
 ```{r}
-#| echo: false
-#| eval: false
 model1 <- glm(Obese ~ Year, data = data, family = "binomial")
+```
+```{r}
+#| eval: false
 model1 %>%
   tab_model(show.ci = F)
-
 ```
 
 This model has the form $$
-\mathrm{ln}(\frac{p}{1-p})=1.01\cdot\mathrm{year}
+\mathrm{ln}(\frac{p}{1-p})=0 + 1.01\cdot\mathrm{year}
 $$ Where $p = \mathrm{Prob(Obese)}$ and $1-p =\mathrm{Prob(Not~ obese)}$
 
-The odds ratio of 1.01 means the odds of being obese increase by 1% per year. The p-value for this predictor is 0.736 which is much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So there is no statistcal evidence that obesity prevalence changed between 2013 and 2016. 
+The odds ratio of 1.01 means the odds of being obese are estimated to increase by 1% per year. The p-value for this predictor is 0.736 which is much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So there is no statistical evidence that obesity prevalence changed between 2013 and 2016 based on the sample. 
+
+To assess model fit and check assumptions, the following plots are made:
+```{r}
+#| label: fig-assump1
+#| fig-cap: "Plots for checking the assumptions of the model."
+#| fig-width: 10
+#| fig-height: 8
+check_model(model1, check = c("pp_check","binned_residuals","outliers","qq"))
+```
+The plots in @fig-assump1 check the assumptions for the logistic regression model. The posterior predictive plot (top left) indicates the model is able to reproduce the observed data, suggesting a good fit overall. The binned residuals plot (top right) shows the residuals fall within the error bounds, implying the link function is suitable. The influential observations plot (bottom left) shows there are no highly influential data points, as they all lie within the contour lines. The QQ-plot of the quantile residuals (bottom right) shows that the residuals fall closely on the line showing no major deviations from the expected residual behaviour.
+
+Since no major violations are evident, the logistic regression model appears to be a good fit for the data. 
 
 To determine if there are any differences in obesity by age, gender, socio-economic status or life-style factors a logistic model is created with obesity as a binary outcome, using age group, gender, and employment as the predictors with a reference category of *16-24* for age group and *Doing something else* for employment.
 
@@ -75,20 +88,25 @@ model2 <- glm(Obese ~ AgeGroup + Sex + Employment, data = data, family = "binomi
 ```
 ```{r}
 #| label: tbl-model2
-#| tbl-cap: "Summaries of the linear regression model for obesity against age, employment and gender."
+#| tbl-cap: "Summaries of the logistic regression model for obesity against age, employment and gender."
 
 model2 %>%
   tab_model(show.ci = F)
 ```
 
-The results from @tbl-model2 allow the odds to be compared for each predictor. For age, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group which has an odds ratio of 0.22. Men had slightly lower odds of obesity than woman, with an odds ratio of 0.9,although small, the difference appears to be significant. For the employment categories, those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and certain socio-economic factors are associated with differences in obesity prevalence, while select employment categories show non-significant effects. 
+The results from @tbl-model2 allow the odds to be compared for each predictor. For age, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group which has an odds ratio of 0.22. Men had slightly lower odds of obesity than woman, with an odds ratio of 0.9,although small, the difference appears to be statistically significant. For the employment categories, those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and some employment categories are associated with obesity, while select employment categories show non-significant effects. 
+
+To determine if the model fits the data well, the following plots are made:
+```{r}
+#| label: fig-assump2
+#| fig-cap: "Final model diagnostic plots."
+#| fig-width: 10
+#| fig-height: 8
+check_model(model2, check = c("pp_check","binned_residuals","outliers","qq"))
+```
+The plots in @fig-assump2 assess the assumptions and fit of the logistic regression model. The posterior predictive check (top left) indicates the model captures the pattern of the observed data. The binned residuals plot (top right) shows the residuals mostly fall within the error bounds, suggesting an appropriate model specification. There are no indications of problematic observations as shown in the influential observations plot (bottom left), as all points lie within the contour lines. The QQ plot (bottom right) shows the residuals align closely with the reference line, indicating no substantial departures from the expected distribution.
+
+Since no assumptions appear to be violated, the logistic regression model appears to be a good fit for the data. 
 
 # Conclusions {#sec-con}
-
-This analysis investigated obesity prevalence in Scotland using data from the Scottish Health Survey (2013–2016).
-
-The exploratory analysis showed variation in obesity prevalence across demographic groups, particularly across different age groups and employment categories.
-
-The logistic regression model confirmed that demographic characteristics are associated with obesity risk. These findings suggest that obesity is not evenly distributed across the population and may be influenced by social and economic and demographic factors.
-
-Future work could extend this analysis by incorporating additional lifestyle variables such as diet, physical activity, or income levels. Analysing more recent survey data would also help determine whether the observed patterns persist over time.
+The prevalence of diabetes in Scotland has not significantly changed between 2013 and 2016. *Age*, *employment*, and *gender* are associated with obesity. Where age groups 55-64 and 65-74 have the highest odds of being obese, men are less likely to be obese than women, and those looking after home/family or permanently unable to work also have higher odds of being obese. 
