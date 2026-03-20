@@ -2,7 +2,6 @@
 title: "EDA 2"
 format: html
 editor: visual
-runtime: shiny
 ---
 
 ## Exploratory Data Analysis
@@ -27,9 +26,6 @@ data$obesity <- (ifelse(data$BMIgroup == "Obese",1,0))
 #| echo: false
 #| message: false
 
-(data$obesity)
-summary(data$obesity)
-
 obesity_year <- data %>% group_by(Year) %>%
   summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
 
@@ -42,14 +38,17 @@ obesity_emp <- data %>% group_by(Employment) %>%
 obesity_sex <- data %>% group_by(Sex) %>%
   summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
 
+mean(data$obesity)
+sd(data$obesity)
 ```
 
-We begin by considering the changes in obesity prevalence across the years in question. It appears that from @fig_obesity_year_bar and @tbl_obesity_year that there have been minimal variations in rate across the years, and since the sample size is split fairly evenly between years, these results are likely evenly representative. Prevalence appears to have peaked in 2015, having been at its lowest point the prior year.
+The overall rate of obesity across all measured data was 0.304 with a standard deviation of 0.460.
 
 ```{r}
 #| echo: false
 #| label: tbl-obesity_year
-
+#| fig-align: center
+#| fig-cap: Table of Obesity Prevalence in Each Year
 obesity_year %>% 
   gt(rowname_col = "Year") %>%
   tab_header(
@@ -62,6 +61,7 @@ obesity_year %>%
 ```{r}
 #| echo: false
 #| label: fig-obesity_year_bar
+#| fig-align: center
 
 ggplot(data, aes(fill=as.factor(obesity),x=Year)) +
   geom_bar() +
@@ -70,12 +70,12 @@ ggplot(data, aes(fill=as.factor(obesity),x=Year)) +
 
 ```
 
-We can see from @tbl-obesity_sex that the rate of obesity appears to be slightly higher in female participants than male.
+We begin by considering the changes in obesity prevalence across the years in question. It appears that from @fig-obesity_year_bar and @tbl-obesity_year that there have been minimal variations in rate across the years, and since the sample size is split fairly evenly between years, these results are likely evenly representative. Prevalence appears to have peaked in 2015, having been at its lowest point the prior year.
 
 ```{r}
 #| echo: false
 #| label: tbl-obesity_sex
-
+#| fig-align: center
 obesity_sex %>% 
   gt(rowname_col = "Sex") %>%
   tab_header(
@@ -88,7 +88,7 @@ obesity_sex %>%
 ```{r}
 #| echo: false
 #| label: fig-obesity_sex_bar
-
+#| fig-align: center
 ggplot(data, aes(fill=as.factor(obesity),x=Sex)) +
   geom_bar() +
   labs(title="Obesity by Sex", y="Count", fill="Obesity")
@@ -96,13 +96,12 @@ ggplot(data, aes(fill=as.factor(obesity),x=Sex)) +
 
 ```
 
-
-We can see an increase in obesity rate as we ascend age groups, with all but 75+ being higher than the last. Obesity rates appear to peak between ages 65-74, however the rates are similar between 45-54, 55-64 and 65-74. This lines up with what one would expect from age, as physical ability and activity tend to decrease with age, as well as higher prevalence of autoimmune disease and hormonal conditions. The drop in prevalence among 75+ year-olds is also expected as elderly people's diets are often nutritionally insufficient.
+We can see from @tbl-obesity_sex that the rate of obesity appears to be slightly higher in female participants than male.
 
 ```{r}
 #| echo: false
 #| label: tbl-obesity_age
-
+#| fig-align: center
 obesity_age %>% 
   gt(rowname_col = "AgeGroup") %>%
   tab_header(
@@ -115,7 +114,7 @@ obesity_age %>%
 ```{r}
 #| echo: false
 #| label: fig-obesity_age_bar
-
+#| fig-align: center
 ggplot(data, aes(fill=as.factor(obesity),x=AgeGroup)) +
   geom_bar() +
   labs(title="Obesity by Age", y="Count", fill="Obesity")
@@ -123,13 +122,12 @@ ggplot(data, aes(fill=as.factor(obesity),x=AgeGroup)) +
 
 ```
 
-
-Obesity rates vary greatly with employment status, though so does share of the study in each group. There is comparatively little data for groups like those "Doing something else" while over half of all data pertains to those "In paid employment etc.". The highest rates appear to be among those permanently unable to work, which aligns with expectation as the reason for this tends to be disability which can have significant correlations with weight extremes. The lowest rates are among those in full time education, which is in line with expectations also as most students are in younger age groups which we know from @tbl-obesity_age have the lowest obesity rates.
+We can see an increase in obesity rate as we ascend age groups, with all but 75+ being higher than the last. Obesity rates appear to peak between ages 65-74, however the rates are similar between 45-54, 55-64 and 65-74. This lines up with what one would expect from age, as physical ability and activity tend to decrease with age, as well as higher prevalence of autoimmune disease and hormonal conditions. The drop in prevalence among 75+ year-olds is also expected as elderly people's diets are often nutritionally insufficient.
 
 ```{r}
 #| echo: false
 #| label: tbl-obesity_emp
-
+#| fig-align: center
 obesity_emp %>% 
   gt(rowname_col = "Employment") %>%
   tab_header(
@@ -142,7 +140,7 @@ obesity_emp %>%
 ```{r}
 #| echo: false
 #| label: fig-obesity_emp_bar
-
+#| fig-align: center
 ggplot(data, aes(fill=as.factor(obesity),x=Employment)) +
   geom_bar() +
   labs(title="Obesity by Employment Status", y="Count", fill="Obesity")
@@ -150,12 +148,4 @@ ggplot(data, aes(fill=as.factor(obesity),x=Employment)) +
 
 ```
 
-
-
-
-
-
-
-
-
-
+Obesity rates vary greatly with employment status, though so does share of the study in each group. There is comparatively little data for groups like those "Doing something else" while over half of all data pertains to those "In paid employment etc.". The highest rates appear to be among those permanently unable to work, which aligns with expectation as the reason for this tends to be disability which can have significant correlations with weight extremes. The lowest rates are among those in full time education, which is in line with expectations also as most students are in younger age groups which we know from @tbl-obesity_age have the lowest obesity rates.
