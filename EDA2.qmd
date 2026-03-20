@@ -1,0 +1,161 @@
+---
+title: "EDA 2"
+format: html
+editor: visual
+runtime: shiny
+---
+
+## Exploratory Data Analysis
+
+```{r}
+#| echo: false
+#| message: false
+
+library(tidyverse)
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+library(gt)
+
+data <- na.omit(read_csv("C:/Users/joelt/Documents/Course Content/Stats 3/Data Analysis/Group Project/DAProject11.csv"))
+
+data$obesity <- (ifelse(data$BMIgroup == "Obese",1,0))
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+
+(data$obesity)
+summary(data$obesity)
+
+obesity_year <- data %>% group_by(Year) %>%
+  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+
+obesity_age <- data %>% group_by(AgeGroup) %>%
+  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+
+obesity_emp <- data %>% group_by(Employment) %>%
+  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+
+obesity_sex <- data %>% group_by(Sex) %>%
+  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+
+```
+
+We begin by considering the changes in obesity prevalence across the years in question. It appears that from @fig_obesity_year_bar and @tbl_obesity_year that there have been minimal variations in rate across the years, and since the sample size is split fairly evenly between years, these results are likely evenly representative. Prevalence appears to have peaked in 2015, having been at its lowest point the prior year.
+
+```{r}
+#| echo: false
+#| label: tbl-obesity_year
+
+obesity_year %>% 
+  gt(rowname_col = "Year") %>%
+  tab_header(
+    title = "Obesity Prevalence by Year"
+  ) %>%
+  tab_stubhead(label="Year")
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-obesity_year_bar
+
+ggplot(data, aes(fill=as.factor(obesity),x=Year)) +
+  geom_bar() +
+  labs(title="Obesity by Year", y="Count", fill="Obesity")
+
+
+```
+
+We can see from @tbl-obesity_sex that the rate of obesity appears to be slightly higher in female participants than male.
+
+```{r}
+#| echo: false
+#| label: tbl-obesity_sex
+
+obesity_sex %>% 
+  gt(rowname_col = "Sex") %>%
+  tab_header(
+    title = "Obesity Prevalence by Sex"
+  ) %>%
+  tab_stubhead(label="Sex")
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-obesity_sex_bar
+
+ggplot(data, aes(fill=as.factor(obesity),x=Sex)) +
+  geom_bar() +
+  labs(title="Obesity by Sex", y="Count", fill="Obesity")
+
+
+```
+
+
+We can see an increase in obesity rate as we ascend age groups, with all but 75+ being higher than the last. Obesity rates appear to peak between ages 65-74, however the rates are similar between 45-54, 55-64 and 65-74. This lines up with what one would expect from age, as physical ability and activity tend to decrease with age, as well as higher prevalence of autoimmune disease and hormonal conditions. The drop in prevalence among 75+ year-olds is also expected as elderly people's diets are often nutritionally insufficient.
+
+```{r}
+#| echo: false
+#| label: tbl-obesity_age
+
+obesity_age %>% 
+  gt(rowname_col = "AgeGroup") %>%
+  tab_header(
+    title = "Obesity Prevalence by Age"
+  ) %>%
+  tab_stubhead(label="Age")
+  
+```
+
+```{r}
+#| echo: false
+#| label: fig-obesity_age_bar
+
+ggplot(data, aes(fill=as.factor(obesity),x=AgeGroup)) +
+  geom_bar() +
+  labs(title="Obesity by Age", y="Count", fill="Obesity")
+
+
+```
+
+
+Obesity rates vary greatly with employment status, though so does share of the study in each group. There is comparatively little data for groups like those "Doing something else" while over half of all data pertains to those "In paid employment etc.". The highest rates appear to be among those permanently unable to work, which aligns with expectation as the reason for this tends to be disability which can have significant correlations with weight extremes. The lowest rates are among those in full time education, which is in line with expectations also as most students are in younger age groups which we know from @tbl-obesity_age have the lowest obesity rates.
+
+```{r}
+#| echo: false
+#| label: tbl-obesity_emp
+
+obesity_emp %>% 
+  gt(rowname_col = "Employment") %>%
+  tab_header(
+    title = "Obesity Prevalence by Employment Status"
+  ) %>%
+  tab_stubhead(label="Status")
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-obesity_emp_bar
+
+ggplot(data, aes(fill=as.factor(obesity),x=Employment)) +
+  geom_bar() +
+  labs(title="Obesity by Employment Status", y="Count", fill="Obesity")
+
+
+```
+
+
+
+
+
+
+
+
+
+
