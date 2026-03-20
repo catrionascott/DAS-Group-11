@@ -137,13 +137,15 @@ obesity_emp %>%
 
 ```
 
-```{r}
+```{r, fig.width=10}
 #| echo: false
 #| label: fig-obesity_emp_bar
 #| fig-align: center
-ggplot(data, aes(fill=as.factor(obesity),x=Employment)) +
+
+ggplot(data, aes(fill=as.factor(obesity),y=fct_rev(Employment))) +
   geom_bar() +
   labs(title="Obesity by Employment Status", y="Count", fill="Obesity")
+  
 
 
 ```
