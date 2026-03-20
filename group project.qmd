@@ -21,7 +21,8 @@ library(ggplot2)
 library(performance)
 library(skimr)        
 library(sjPlot)
-library(kableExtra)   
+library(kableExtra)  
+library(gt)
 ```
 
 # Introduction {#sec-intro}
@@ -35,7 +36,6 @@ The main objective of this analysis is to examine whether the prevalence of obes
 ```{r}
 library(tidyverse)
 
-data <- read.csv("DAProject11.csv")
 ```
 
 # Exploratory Analysis {#sec-EA}
@@ -45,7 +45,7 @@ Before conducting formal statistical modelling, an exploratory analysis was perf
 ```{r}
 data <- na.omit(read_csv("C:/Users/joelt/Documents/Course Content/Stats 3/Data Analysis/Group Project/DAProject11.csv"))
 
-data$obesity <- (ifelse(data$BMIgroup == "Obese",1,0))
+data$Obese <- (ifelse(data$BMIgroup == "Obese",1,0))
 
 ```
 
@@ -54,19 +54,19 @@ data$obesity <- (ifelse(data$BMIgroup == "Obese",1,0))
 #| message: false
 
 obesity_year <- data %>% group_by(Year) %>%
-  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+  summarise(Rate = round(mean(as.numeric(Obese)),3), Count = n())
 
 obesity_age <- data %>% group_by(AgeGroup) %>%
-  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+  summarise(Rate = round(mean(as.numeric(Obese)),3), Count = n())
 
 obesity_emp <- data %>% group_by(Employment) %>%
-  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+  summarise(Rate = round(mean(as.numeric(Obese)),3), Count = n())
 
 obesity_sex <- data %>% group_by(Sex) %>%
-  summarise(Rate = round(mean(as.numeric(obesity)),3), Count = n())
+  summarise(Rate = round(mean(as.numeric(Obese)),3), Count = n())
 
-mean(data$obesity)
-sd(data$obesity)
+mean(data$Obese)
+sd(data$Obese)
 ```
 
 The overall rate of obesity across all measured data was 0.304 with a standard deviation of 0.460.
@@ -90,7 +90,7 @@ obesity_year %>%
 #| label: fig-obesity_year_bar
 #| fig-align: center
 
-ggplot(data, aes(fill=as.factor(obesity),x=Year)) +
+ggplot(data, aes(fill=as.factor(Obese),x=Year)) +
   geom_bar() +
   labs(title="Obesity by Year", y="Count", fill="Obesity")
 
@@ -116,7 +116,7 @@ obesity_sex %>%
 #| echo: false
 #| label: fig-obesity_sex_bar
 #| fig-align: center
-ggplot(data, aes(fill=as.factor(obesity),x=Sex)) +
+ggplot(data, aes(fill=as.factor(Obese),x=Sex)) +
   geom_bar() +
   labs(title="Obesity by Sex", y="Count", fill="Obesity")
 
@@ -142,7 +142,7 @@ obesity_age %>%
 #| echo: false
 #| label: fig-obesity_age_bar
 #| fig-align: center
-ggplot(data, aes(fill=as.factor(obesity),x=AgeGroup)) +
+ggplot(data, aes(fill=as.factor(Obese),x=AgeGroup)) +
   geom_bar() +
   labs(title="Obesity by Age", y="Count", fill="Obesity")
 
@@ -169,7 +169,7 @@ obesity_emp %>%
 #| label: fig-obesity_emp_bar
 #| fig-align: center
 
-ggplot(data, aes(fill=as.factor(obesity),y=fct_rev(Employment))) +
+ggplot(data, aes(fill=as.factor(Obese),y=fct_rev(Employment))) +
   geom_bar() +
   labs(title="Obesity by Employment Status", y="Count", fill="Obesity")
   
