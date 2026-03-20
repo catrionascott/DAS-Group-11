@@ -4,6 +4,8 @@ author: "Group 11"
 execute: 
   echo: false
   eval: true
+  warning: false
+  error: false
 number-sections: true
 format:
   html:
@@ -21,7 +23,8 @@ library(ggplot2)
 library(performance)
 library(skimr)        
 library(sjPlot)
-library(kableExtra)   
+library(kableExtra) 
+library(nnet)
 ```
 
 # Introduction {#sec-intro}
@@ -32,11 +35,7 @@ There are many factors that may contribute to obesity. The Scotish health survey
 library(tidyverse)
 data <- read.csv("DAProject11.csv")
 ```
-
 # Exploratory Analysis {#sec-EA}
-
-Before conducting formal statistical modelling, an exploratory analysis was performed to understand the distribution of obesity within the data-set and to identify potential patterns across demographic groups.
-
 ## Creating Obesity Indicator
 
 A binary obesity variable is created from the **BMIgroup** variable.
@@ -48,169 +47,41 @@ Obese = ifelse(BMIgroup == "Obese",1,0)
 )
 ```
 
-## Obesity Prevalence by Year
-
-To examine whether obesity prevalence has changed between 2013 and 2016, the proportion of individuals classified as obese was calculated for each survey year.
-
-```{r}
-obesity_year <- data %>%
-  group_by(Year) %>%
-  summarise(
-    prevalence = mean(Obese)
-  )
-
-ggplot(obesity_year, aes(x = Year, y = prevalence)) +
-  geom_point() +
-  geom_line() +
-  labs(
-    title = "Obesity prevalence in Scotland (2013–2016)",
-    y = "Obesity prevalence",
-    x = "Year"
-  )
-
-```
-
-The plot suggests that obesity prevalence remains relatively stable across the years, with only small fluctuations observed between survey periods. This indicates that there may not be a strong temporal trend in obesity prevalence during the study period.
-
-## Obesity by Sex
-
-```{r}
-ggplot(data, aes(x = Sex, fill = factor(Obese))) +
-  geom_bar(position = "fill") +
-  labs(
-    title = "Obesity prevalence by sex",
-    y = "Proportion",
-    fill = "Obese"
-  )
-```
-
-The distribution of obesity across males and females was also examined. The visualisation shows that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
-
-## Obesity by Age Group
-
-```{r}
-ggplot(data, aes(x = AgeGroup, fill = factor(Obese))) +
-  geom_bar(position = "fill") +
-  labs(
-    title = "Obesity prevalence by age group",
-    y = "Proportion",
-    fill = "Obese"
-  )
-```
-
-Substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
-
-## Obesity by Employment Status
-
-```{r}
-ggplot(data, aes(x = Employment, fill = factor(Obese))) +
-  geom_bar(position = "fill") +
-  labs(
-    title = "Obesity prevalence by employment status",
-    y = "Proportion",
-    fill = "Obese"
-  )
-```
-
-Differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
-
-Overall, the exploratory analysis highlights potential relationships between obesity prevalence and several demographic characteristics. These patterns will be formally tested in the following section using statistical modelling.
-
 # Formal Analysis {#sec-FA}
-
-Model 1: Time trend in obesity
-
-The first model examines whether the prevalence of obesity changed over the survey years.
-
-{r}
-#| echo: false 
-model1 <- glm(Obese ~ Year, data = data, family = binomial) 
-tab_model(model1, show.ci = TRUE)
-
-This model estimates the association between survey year and the probability of being classified as obese. A significant coefficient for Year would indicate that obesity prevalence has changed over time.
-
-Model 2: Demographic and socio-economic factors
-
-The second model examines whether obesity prevalence differs across demographic and socio-economic groups.
-
-{r}
-#| echo: false 
-data$AgeGroup <- as.factor(data$AgeGroup) 
-data$Sex <- as.factor(data$Sex) 
-data$Employment <- as.factor(data$Employment) 
-model2 <- glm(Obese ~ AgeGroup + Sex + Employment, data = data, family = binomial) 
-tab_model(model2, show.ci = TRUE)
-
-This model evaluates whether obesity prevalence varies by age group, sex, and employment status. These variables are treated as categorical predictors in the logistic regression.
-
-Model 3: Full model
-
-To formally examine the determinants of obesity, we estimate a **logistic regression model** where the probability of being obese depends on demographic characteristics and survey year.
-
-$$
-\text{logit}(P(\text{Obese}=1)) =
-\beta_0 +
-\beta_1 Year +
-\beta_2 {\mathrm{Male}} \cdot \mathbb{I}_{\mathrm{Male}}(x) +
-\beta_3 AgeGroup +
-\beta_4 Employment
-$$
-
-$$
-\mathbb{I}_{\mathrm{Male}}(x) =
-\begin{cases} 
-1 ~ \text{if the gender of the }x\text{th observation is Male},\\
-0 ~ \text{otherwise}
-\end{cases}
-$$
-
-where $P(\text{Obese}=1)$represents the probability that an individual is classified as obese.
-
-The intercept $( \beta_0 )$ represents the baseline log-odds of obesity when all explanatory variables are at their reference levels. The coefficients ( $\beta_1$, $\beta_2$, $\beta_3$ ) and ( $\beta_4$ ) measure the change in the log-odds of obesity associated with a one-unit change in the corresponding predictor or relative to a reference category.
-
-The coefficients represent the change in the log-odds of obesity associated with each explanatory variable. The model was estimated using logistic regression in R.
+To determine if the prevalence of obesity in Scotland changed from 2013 to 2016 a logistic regression model is created.
 
 ```{r}
-#|echo: false
-#|message: false
-
-model3 <- glm(
-  Obese ~ Year + Sex + AgeGroup + Employment,
-  data = data,
-  family = binomial
-)
-
-tab_model(model3, show.ci = TRUE)
-```
-
-The fitted logistic regression model allows us to examine how the probability of being classified as obese varies with demographic and social-economic factors.
-
--   The intercept $\beta_0$ represents the log-odds of obesity for the baseline categories: survey year 2013, females, the youngest age group, and the employed category.
-
--   The coefficient for Year $(\beta_1)$ indicates the change in log-odds of obesity for each subsequent survey year compared with 2013.
-
--   The coefficient for Sex $(\beta_2​)$ represents the difference in log-odds of obesity for males relative to females; the odds ratio can be interpreted as the multiplicative change in the odds of obesity for males.
-
--   Age-Group coefficients $(\beta_3)$ show how the log-odds of obesity differ across age ranges relative to the youngest age group.
-
--   Employment status $(\beta_4​)$ captures differences in obesity risk by employment, reflecting potential social-economic influences.
-
--   Table presents the estimated odds ratios and confidence intervals for all predictors. These results provide a clear interpretation of how each factor affects the likelihood of obesity, allowing us to quantify differences between groups.
-
-```{r}
-#| fig-align: center
-#| fig-width: 6
-#| fig-height: 4
-#| fig-cap: Scatterplots of the deviance residuals by gender (left) and a histogram of the residuals (right).
-#| label: fig-resids
 #| echo: false
-#| message: false
+#| eval: false
+model1 <- glm(Obese ~ Year, data = data, family = "binomial")
+model1 %>%
+  tab_model(show.ci = F)
 
-library(performance)
-library(see)
-
-check_model(model3, residual_type = "deviance", check = c("linearity","outliers"))
 ```
+
+This model has the form $$
+\mathrm{ln}(\frac{p}{1-p})=1.01\cdot\mathrm{year}
+$$ Where $p = \mathrm{Prob(Obese)}$ and $1-p =\mathrm{Prob(Not~ obese)}$
+
+The odds ratio of 1.01 means the odds of being obese increase by 1% per year. The p-value for this predictor is 0.736 which is much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So there is no statistcal evidence that obesity prevalence changed between 2013 and 2016. 
+
+To determine if there are any differences in obesity by age, gender, socio-economic status or life-style factors a logistic model is created with obesity as a binary outcome, using age group, gender, and employment as the predictors with a reference category of *16-24* for age group and *Doing something else* for employment.
+
+```{r}
+data$AgeGroup <- as.factor(data$AgeGroup)
+data$Employment <- as.factor(data$Employment)
+data$Sex <- as.factor(data$Sex)
+model2 <- glm(Obese ~ AgeGroup + Sex + Employment, data = data, family = "binomial")
+```
+```{r}
+#| label: tbl-model2
+#| tbl-cap: "Summaries of the linear regression model for obesity against age, employment and gender."
+
+model2 %>%
+  tab_model(show.ci = F)
+```
+
+The results from @tbl-model2 allow the odds to be compared for each predictor. For age, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group which has an odds ratio of 0.22. Men had slightly lower odds of obesity than woman, with an odds ratio of 0.9,although small, the difference appears to be significant. For the employment categories, those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and certain socio-economic factors are associated with differences in obesity prevalence, while select employment categories show non-significant effects. 
 
 Figure shows deviance residuals for the logistic regression model. The scatterplot by gender (left) and the histogram of residuals (right) indicate that there are no major violations of model assumptions. The residuals appear reasonably distributed, and no influential outliers are detected.
 
