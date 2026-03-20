@@ -49,22 +49,17 @@ Obese = ifelse(BMIgroup == "Obese",1,0)
 ```
 
 # Formal Analysis {#sec-FA}
-To determine if the prevalence of obesity in Scotland changed from 2013 to 2016 a logistic regression model is created.
+To determine if the prevalence of obesity in Scotland changed from 2013 to 2016 a logistic regression model is created. Year is made into a factor, since there is no linear pattern from year to year. 
 
 ```{r}
-model1 <- glm(Obese ~ Year, data = data, family = "binomial")
+model1 <- glm(factor(Obese) ~ factor(Year), data = data, family = "binomial")
 ```
 ```{r}
-#| eval: false
+#| eval: TRUE
 model1 %>%
   tab_model(show.ci = F)
 ```
-
-This model has the form $$
-\mathrm{ln}(\frac{p}{1-p})=0 + 1.01\cdot\mathrm{year}
-$$ Where $p = \mathrm{Prob(Obese)}$ and $1-p =\mathrm{Prob(Not~ obese)}$
-
-The odds ratio of 1.01 means the odds of being obese are estimated to increase by 1% per year. The p-value for this predictor is 0.736 which is much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So there is no statistical evidence that obesity prevalence changed between 2013 and 2016 based on the sample. 
+The odds ratios of 0.99, 1.02, and 1.01 means the odds of being obese are estimated to increase by about 1% per year. The p-values of 0.913, 0.749, and 0.832 are much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So there is no statistical evidence that obesity prevalence changed between 2013 and 2016 based on the sample. 
 
 To assess model fit and check assumptions, the following plots are made:
 ```{r}
@@ -110,3 +105,4 @@ Since no assumptions appear to be violated, the logistic regression model appear
 
 # Conclusions {#sec-con}
 The prevalence of diabetes in Scotland has not significantly changed between 2013 and 2016. *Age*, *employment*, and *gender* are associated with obesity. Where age groups 55-64 and 65-74 have the highest odds of being obese, men are less likely to be obese than women, and those looking after home/family or permanently unable to work also have higher odds of being obese. 
+
