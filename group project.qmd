@@ -94,7 +94,7 @@ model2 %>%
   tab_model(show.ci = F)
 ```
 
-The results from @tbl-model2 allow the odds to be compared for each predictor. For age, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group which has an odds ratio of 0.22. Men had slightly lower odds of obesity than woman, with an odds ratio of 0.9,although small, the difference appears to be statistically significant. For the employment categories, those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and some employment categories are associated with obesity, while select employment categories show non-significant effects. 
+The results from @tbl-model2 allow the odds to be compared for each predictor. The regression results indicate that age group is strongly associated with obesity risk, more specifically, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group which has an odds ratio of 0.22. Differences between males and females are also observed, suggesting that gender may influence obesity prevalence where men had slightly lower odds of obesity than woman, with an odds ratio of 0.9. Although small, the difference appears to be statistically significant, with a p-value less than 0.05. Employment status may also play a role in obesity prevalence, potentially reflecting differences in social-economic circumstances and lifestyle behaviors. Those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and some employment categories are associated with obesity, while select employment categories show non-significant effects. 
 
 To determine if the model fits the data well, the following plots are made:
 ```{r}
@@ -107,14 +107,6 @@ check_model(model2, check = c("pp_check","binned_residuals","outliers","qq"))
 The plots in @fig-assump2 assess the assumptions and fit of the logistic regression model. The posterior predictive check (top left) indicates the model captures the pattern of the observed data. The binned residuals plot (top right) shows the residuals mostly fall within the error bounds, suggesting an appropriate model specification. There are no indications of problematic observations as shown in the influential observations plot (bottom left), as all points lie within the contour lines. The QQ plot (bottom right) shows the residuals align closely with the reference line, indicating no substantial departures from the expected distribution.
 
 Since no assumptions appear to be violated, the logistic regression model appears to be a good fit for the data. 
-
-The regression results indicate that age group is strongly associated with obesity risk. Individuals in older age groups tend to have higher odds of being classified as obese compared with younger individuals.
-
-Differences between males and females are also observed, suggesting that gender may influence obesity prevalence. However, the magnitude of this effect appears relatively modest.
-
-Employment status may also play a role in obesity prevalence, potentially reflecting differences in social-economic circumstances and lifestyle behaviors.
-
-The coefficient associated with survey year provides information about whether obesity prevalence has changed over time. The results suggest that there is limited evidence of a strong trend in obesity prevalence between 2013 and 2016.
 
 # Conclusions {#sec-con}
 The prevalence of diabetes in Scotland has not significantly changed between 2013 and 2016. *Age*, *employment*, and *gender* are associated with obesity. Where age groups 55-64 and 65-74 have the highest odds of being obese, men are less likely to be obese than women, and those looking after home/family or permanently unable to work also have higher odds of being obese. 
