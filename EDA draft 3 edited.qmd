@@ -71,7 +71,7 @@ year_rates <- data %>%
   group_by(Year) %>%
   summarise(ObesityRate = round(mean(Obese)*100,1))
 colnames(year_rates) <- c("Year", "Obesity Rates")
-kable(year_rates, caption = "Table 1: Obesity Prevalence by Year")
+kable(year_rates)
 ```
 
 @tbl-1 shows the obesity rates by year in Scotland between 2013 and 2016. The percentage of individuals classified as obese fluctuated between 30.2% and 30.6%, indicating no clear upward or downward trend over the surveyed years.
@@ -170,9 +170,9 @@ p2 <- ggplot(data, aes(x = Employment, y = Obese, fill = Sex)) +
 
  @fig-3 (panel a) shows that obesity prevalence differ slightly between males and females across age groups. In most age groups up to and including *45–54*, as well as in the *75+* category, females exhibit higher obesity rates than males. In contrast, in the *55–64* age group, males have a higher obesity rate than females. For individuals aged *65–74*, the obesity rates for males and females are very similar, with little difference between the two groups.
 
-@fig-3(panel b) show that obesity rates vary across categories and between sexes. In most employment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate.
+@fig-3 (panel b) show that obesity rates vary across categories and between sexes. In most employment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate.
 
-Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in @fig-3(a), where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
+Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in @fig-3 (panel a), where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
 
 #### Obesity by Sex, Age Group or Employment Status
 
