@@ -21,7 +21,7 @@ The dataset (`DAProject11.csv`) contains the following variables:
   - Model 1: Obesity ~ Year
   - Model 2: Obesity ~ AgeGroup + Sex + Employment
 
-   ## Repository Structure
+ ## Repository Structure
 - `group project.qmd` – Main analysis file  
 - `DAProject11.csv` – Dataset  
 - `group project.pdf` – Final outputs  
