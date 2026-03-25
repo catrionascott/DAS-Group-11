@@ -1,5 +1,5 @@
 ---
-title: "Obesity Prevalence in Scotland (2013–2016)"
+title: "Analysis of Obesity Prevalence in Scotland"
 author: "Group 11"
 execute: 
   echo: false
@@ -15,6 +15,13 @@ format:
 
 editor_options: 
   chunk_output_type: console
+---
+---
+geometry:
+  - top=0.5in
+  - bottom=0.5in
+  - left=0.5in
+  - right=0.5in
 ---
 
 ```{r}
