@@ -6,10 +6,13 @@ execute:
   eval: true
   warning: false
   error: false
+
 number-sections: true
+
 format:
   pdf:
     embed-resources: true
+
 editor_options: 
   chunk_output_type: console
 ---
@@ -43,19 +46,18 @@ data <- read.csv("DAproject11.csv")
 ```
 
 ```{r}
-#|echo: true
+#| echo: false
 data$Obese <- ifelse(data$BMIgroup == "Obese",1,0)
 
 data$ObeseRate <- ifelse(data$BMIgroup == "Obese","yes","no")
 ```
 
-#### Obesity Prevalence in Scotland by Year
-
 To examine whether obesity prevalence has changed between 2013 and 2016, the proportion of individuals classified as obese was calculated for each survey year.
 
 ```{r}
-#|echo: false
-#|output: false
+#| echo: false
+#| output: false
+
 mean(data$Obese)
 obesity_year <- data %>%
   group_by(Year) %>%
@@ -128,7 +130,6 @@ p2 <- ggplot(data, aes(x = Employment, y = Obese, fill = Sex)) +
 
 @fig-2 (panel b) show that obesity rates vary across categories and between sexes. In most employment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate. Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in @fig-2 (panel a), where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
 
-#### Obesity by Sex, Age Group or Employment Status
 
 ```{r}
 #| fig-width: 15
@@ -171,7 +172,6 @@ The distribution of obesity across males and females was also examined. The visu
 
 @fig-3 (panel c) shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
 
-#### Obesity Prevalence by Sex, Age and Employment Status
 
 ```{r}
 #| label: tbl-2
@@ -230,8 +230,8 @@ To assess model fit and check assumptions, the following plots are made:
 ```{r}
 #| label: fig-assump1
 #| fig-cap: "Plots for checking the assumptions of the model."
-#| fig-width: 10
-#| fig-height: 8
+#| fig-width: 9
+#| fig-height: 6
 check_model(model1, check = c("pp_check","binned_residuals","outliers","qq"))
 ```
 The plots in @fig-assump1 check the assumptions for the logistic regression model. The posterior predictive plot (top left) indicates the model is able to reproduce the observed data, suggesting a good fit overall. The binned residuals plot (top right) shows the residuals fall within the error bounds, implying the link function is suitable. The influential observations plot (bottom left) shows there are no highly influential data points, as they all lie within the contour lines. The QQ-plot of the quantile residuals (bottom right) shows that the residuals fall closely on the line showing no major deviations from the expected residual behaviour.
@@ -260,8 +260,8 @@ To determine if the model fits the data well, the following plots are made:
 ```{r}
 #| label: fig-assump2
 #| fig-cap: "Final model diagnostic plots."
-#| fig-width: 10
-#| fig-height: 8
+#| fig-width: 9
+#| fig-height: 5
 check_model(model2, check = c("pp_check","binned_residuals","outliers","qq"))
 ```
 The plots in @fig-assump2 assess the assumptions and fit of the logistic regression model. The posterior predictive check (top left) indicates the model captures the pattern of the observed data. The binned residuals plot (top right) shows the residuals mostly fall within the error bounds, suggesting an appropriate model specification. There are no indications of problematic observations as shown in the influential observations plot (bottom left), as all points lie within the contour lines. The QQ plot (bottom right) shows the residuals align closely with the reference line, indicating no substantial departures from the expected distribution.
