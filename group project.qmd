@@ -8,7 +8,7 @@ execute:
   error: false
 number-sections: true
 format:
-  html:
+  pdf:
     embed-resources: true
 editor_options: 
   chunk_output_type: console
@@ -26,23 +26,17 @@ library(sjPlot)
 library(kableExtra) 
 library(nnet)
 library(see)
+library(patchwork)
 ```
 
 # Introduction {#sec-intro}
-There are many factors that may contribute to obesity. The Scottish health survey provides data on socio-economic and lifestyle factors from 2013-2016 that may be associated with obesity. The variables include age group, gender, employment status,year, and BMI group. Age group categories are *16-24*, *25-34*, *35-44*, *45-54*,*55-64*,*65-74*, and *75+*. Employment status categories are *Doing something else*, *In full time education*, *In paid employment, self-employed or in government training*, *Looking after home/family*, *Looking for/intending to look for paid work*, *Permanently unable to work*, and *Retired*. In this report, we will analyse the relationship between obesity prevalence and time, and investigate whether age, gender, or employment status are associated with differences in obesity prevalence 
+There are many factors that may contribute to obesity. The Scottish health survey provides data on socio-economic and lifestyle factors from 2013-2016 that may be associated with obesity. The variables include age group, gender, employment status,year, and BMI group. Age group categories are *16-24*, *25-34*, *35-44*, *45-54*,*55-64*,*65-74*, and *75+*. Employment status categories are *Doing something else*, *In full time education*, *In paid employment, self-employed or in government training*, *Looking after home/family*, *Looking for/intending to look for paid work*, *Permanently unable to work*, and *Retired*.  In this report, we will analyse the relationship between obesity prevalence and surveyed years. In addition we will investigate whether age, gender, or employment status are associated with differences in obesity prevalence. 
 
 @sec-EA consists of an exploratory analysis of the Scottish health survey (2013 - 2016) and examines the potential relationship between obesity and time as well as the influence of age, employment, or gender on obesity prevalence. @sec-FA contains results from fitting two logistic regression models: the first evaluating whether obesity prevalence changes year to year, and the second assessing the effect age, employment, or gender have on prevalence. Concluding remarks are given in @sec-con.
 ```{r}
-library(tidyverse)
 data <- read.csv("DAProject11.csv")
 ```
 # Exploratory Analysis {#sec-EA}
-## Questions of Interest
-
-1.  Has the prevalence of obesity in Scotland changed over the given years of the Scottish Health Survey?
-2.  Are there any differences in obesity by age, gender, socio-economic status or lifestyle factors?
-
-## Exploratory Data Analysis
 
 ```{r}
 data <- read.csv("DAproject11.csv")
@@ -128,7 +122,7 @@ p2 <- ggplot(data, aes(x = Employment, y = Obese, fill = Sex)) +
 ```{r}
 #| fig-width: 15
 #| fig-height: 8
-#| label: fig-4
+#| label: fig-3
 #| fig-cap: "Graph of Obesity prevalence by Demographic varibales"
 
 r1 <- ggplot(data, aes(x = Sex, fill = factor(ObeseRate))) +
@@ -160,11 +154,11 @@ r3 <-  ggplot(data, aes(x = Employment, fill = factor(ObeseRate))) +
     theme(legend.position = "bottom")
 ```
 
-The distribution of obesity across males and females was also examined. The visualisation findings in @fig-4 (panel a) show that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
+The distribution of obesity across males and females was also examined. The visualisation findings in @fig-3 (panel a) show that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
 
-@fig-4 (panel b) demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
+@fig-3 (panel b) demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
 
-@fig-4 (panel c) shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
+@fig-3 (panel c) shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
 
 #### Obesity Prevalence by Sex, Age and Employment Status
 
@@ -209,7 +203,7 @@ Overall, the exploratory analysis highlights potential relationships between obe
 
 
 # Formal Analysis {#sec-FA}
-To determine if the prevalence of obesity in Scotland changed from 2013 to 2016 a logistic regression model is created. Year is made into a factor, since there is no linear pattern from year to year. 
+To determine if the prevalence of obesity in Scotland changed from 2013 to 2016 a logistic regression model is created. 
 
 ```{r}
 model1 <- glm(factor(Obese) ~ factor(Year), data = data, family = "binomial")
@@ -219,7 +213,7 @@ model1 <- glm(factor(Obese) ~ factor(Year), data = data, family = "binomial")
 model1 %>%
   tab_model(show.ci = F)
 ```
-The odds ratios of 0.99, 1.02, and 1.01 means the odds of being obese are estimated to increase by about 1% per year. The p-values of 0.913, 0.749, and 0.832 are much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So there is no statistical evidence that obesity prevalence changed between 2013 and 2016 based on the sample. 
+The odds ratios of 0.99, 1.02, and 1.01 indicates the odds of being obese are estimated to increase by about 1% per year. Which is quite minimal. Additionally, the p-values of 0.913, 0.749, and 0.832 are much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So, there is not enough statistical evidence to believe obesity prevalence changed between 2013 and 2016 based on the sample. 
 
 To assess model fit and check assumptions, the following plots are made:
 ```{r}
