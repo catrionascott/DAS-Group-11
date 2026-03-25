@@ -116,7 +116,6 @@ p2 <- ggplot(data, aes(x = Employment, y = Obese, fill = Sex)) +
 
 
 
-
 (p1| p2 ) + 
   plot_annotation(
     tag_levels = list(c("(a)",
@@ -125,53 +124,11 @@ p2 <- ggplot(data, aes(x = Employment, y = Obese, fill = Sex)) +
   theme(legend.position = "bottom")
 ```
 
-@fig-2 indicates that age is associated with differences in obesity prevalence. Disregarding sex obesity rates appear to increase progressively across the younger and middle age groups, reaching their highest levels in the *65–74* category, before declining slightly in the *75+* group.
-@fig-2 (panel a) shows that obesity prevalence differ slightly between males and females across age groups. In most age groups up to and including *45–54*, as well as in the *75+* category, females exhibit higher obesity rates than males. In contrast, in the *55–64* age group, males have a higher obesity rate than females. For individuals aged *65–74*, the obesity rates for males and females are very similar, with little difference between the two groups.
+The distribution of obesity across males and females was also examined. The visualisation findings in @fig-2 show that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
 
-@fig-2 (panel b) show that obesity rates vary across categories and between sexes. In most employment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate. Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in @fig-2 (panel a), where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
+@fig-2 (panel a) indicates that age is associated with differences in obesity prevalence. Disregarding sex, obesity rates appear to increase progressively across the younger and middle age groups, reaching their highest levels in the *65–74* category, before declining slightly in the *75+* group. @fig-2 (panel a) shows that obesity prevalence differ slightly between males and females across age groups. In most age groups up to and including *45–54*, as well as in the *75+* category, females exhibit higher obesity rates than males. In contrast, in the *55–64* age group, males have a higher obesity rate than females. For individuals aged *65–74*, the obesity rates for males and females are very similar, with little difference between the two groups. @fig-2 (panel a) demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
 
-
-```{r}
-#| fig-width: 15
-#| fig-height: 8
-#| label: fig-3
-#| fig-cap: "Graph of Obesity prevalence by Demographic varibales"
-
-r1 <- ggplot(data, aes(x = Sex, fill = factor(ObeseRate))) +
-  geom_bar(position = "fill") +
-  labs( title = "Obesity Prevalence by Sex",
-    y = "Proportion",
-    fill = "ObeseRate"
-  )
-
-r2 <- 
-ggplot(data, aes(x = AgeGroup, fill = factor(ObeseRate))) +
-  geom_bar(position = "fill") +
-  labs( title = "Obesity Prevalence by Age group",
-    y = "Proportion",
-    fill = "ObeseRate"
-  )
-
-r3 <-  ggplot(data, aes(x = Employment, fill = factor(ObeseRate))) +
-  geom_bar(position = "fill") +
-  labs( title = "Obesity Prevalence by Employment Status",
-    y = "Proportion",
-    fill = "ObeseRate"
-  ) + guides(x = guide_axis(angle = 40))
-
-(r1|r2|r3) +
-  plot_annotation(tag_levels = list(c("(a)",
-                   "(b)", "(c)"))) &
-   plot_layout(guides = "collect") &
-    theme(legend.position = "bottom")
-```
-
-The distribution of obesity across males and females was also examined. The visualisation findings in @fig-3 (panel a) show that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
-
-@fig-3 (panel b) demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
-
-@fig-3 (panel c) shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes.
-
+@fig-2 (panel b) shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes. In most employment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate. Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in @fig-2 (panel a), where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
 
 ```{r}
 #| label: tbl-2
