@@ -225,7 +225,7 @@ To determine if the model fits the data well, the following plots are made:
 #| label: fig-assump2
 #| fig-cap: "Final model diagnostic plots."
 #| fig-width: 9
-#| fig-height: 5
+#| fig-height: 6
 check_model(model2, check = c("pp_check","binned_residuals","outliers","qq"))
 ```
 The plots in @fig-assump2 assess the assumptions and fit of the logistic regression model. The posterior predictive check (top left) indicates the model captures the pattern of the observed data. The binned residuals plot (top right) shows the residuals mostly fall within the error bounds, suggesting an appropriate model specification. There are no indications of problematic observations as shown in the influential observations plot (bottom left), as all points lie within the contour lines. The QQ plot (bottom right) shows the residuals align closely with the reference line, indicating no substantial departures from the expected distribution.
