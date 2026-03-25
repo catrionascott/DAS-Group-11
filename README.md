@@ -16,7 +16,7 @@ The dataset (`DAProject11.csv`) contains the following variables:
 - BMIgroup: Weight classification
 
 ##  Methods
-- Exploratory Data Analysis (EDA) using visualisations
+- Exploratory Analysis (EA) using visualisations
 - Logistic regression models:
   - Model 1: Obesity ~ Year
   - Model 2: Obesity ~ AgeGroup + Sex + Employment
