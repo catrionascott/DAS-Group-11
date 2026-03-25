@@ -20,3 +20,18 @@ The dataset (`DAProject11.csv`) contains the following variables:
 - Logistic regression models:
   - Model 1: Obesity ~ Year
   - Model 2: Obesity ~ AgeGroup + Sex + Employment
+
+   ## Repository Structure
+- `group project.qmd` – Main analysis file  
+- `DAProject11.csv` – Dataset  
+- `group project.pdf` – Final outputs  
+- `README.md` – Project description  
+
+## Collaboration
+- A separate branch was created for analysis.
+- Changes were committed with meaningful messages.
+- A pull request was created and reviewed by a team member.
+- The branch was merged into the main branch after review.
+
+## Reproducibility
+The analysis can be reproduced by running the `group project.qmd` file.
