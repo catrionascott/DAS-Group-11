@@ -54,6 +54,17 @@ data$ObeseRate <- ifelse(data$BMIgroup == "Obese","yes","no")
 To examine whether obesity prevalence has changed between 2013 and 2016, the proportion of individuals classified as obese was calculated for each survey year.
 
 ```{r}
+#|echo: false
+#|output: false
+mean(data$Obese)
+obesity_year <- data %>%
+  group_by(Year) %>%
+  summarise(
+    prevalence = round(mean(Obese),3)
+  )
+```
+
+```{r}
 #| echo: false
 #| eval: true
 #| warning: false
