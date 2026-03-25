@@ -133,7 +133,7 @@ p2 <- ggplot(data, aes(x = Employment, y = Obese, fill = Sex)) +
 
 The distribution of obesity across males and females was also examined. The visualisation findings in @fig-2 show that obesity prevalence differs slightly between sexes, although the difference appears relatively small. Further statistical analysis is required to determine whether this difference is statistically significant.
 
-@fig-2 (panel a) indicates that age is associated with differences in obesity prevalence. Disregarding sex, obesity rates appear to increase progressively across the younger and middle age groups, reaching their highest levels in the *65–74* category, before declining slightly in the *75+* group. @fig-2 (panel a) shows that obesity prevalence differ slightly between males and females across age groups. In most age groups up to and including *45–54*, as well as in the *75+* category, females exhibit higher obesity rates than males. In contrast, in the *55–64* age group, males have a higher obesity rate than females. For individuals aged *65–74*, the obesity rates for males and females are very similar, with little difference between the two groups. @fig-2 (panel a) demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
+@fig-2 (panel a) indicates that age is associated with differences in obesity prevalence. Disregarding sex, obesity rates appear to increase progressively across the younger and middle age groups, reaching their highest levels in the *65–74* category, before declining slightly in the *75+* group. The figure additionally shows that obesity prevalence differs slightly between males and females across age groups. In most age groups up to and including *45–54*, as well as in the *75+* category, females exhibit higher obesity rates than males. For individuals aged *65–74*, the obesity rates for males and females are very similar, with little difference between the two groups. In summary, @fig-2 (panel a) demonstrates substantial variation in obesity prevalence can be observed across age groups. Older age categories tend to show a higher proportion of individuals classified as obese compared with younger age groups. This suggests that age may be an important factor associated with obesity risk.
 
 @fig-2 (panel b) shows that the differences in obesity prevalence are also visible across employment categories. These differences may reflect underlying Social and economic factors that influence lifestyle behaviours and health outcomes. In most employment groups, females have higher obesity rates than males. An exception occurs in *Looking after home/family* where males have a higher obesity rate. Additionally, obesity rates among individuals who are retired are very similar for males and females. This is consistent with the findings in @fig-2 (panel a), where obesity rates for individuals aged *65-74* were also observed to be very similar between males and females.
 
@@ -168,11 +168,7 @@ kable(
 )
 ```
 
-@tbl-2 shows that obesity prevalence is slightly higher among females, with an obesity rate of 0.351, compared with 0.291 among males.
-
-@tbl-2 also indicates that the *16–24* age group has the lowest obesity rate. Obesity prevalence increases progressively with age, reaching a peak in the *65–74* age group, before declining slightly in the *75+* age group.
-
-@tbl-2 further shows variation by employment status. Individuals in *full-time employmen*t have the lowest obesity rate (0.160), while those *permanently unable to work* exhibit the highest rate (0.426).
+@tbl-2 shows that obesity prevalence is slightly higher among females, with an obesity rate of 0.351, compared with 0.291 among males. The table also indicates that the *16–24* age group has the lowest obesity rate. Obesity prevalence increases progressively with age, before declining slightly in the *75+* age group. @tbl-2 further shows variation by employment status. Individuals in *full-time employmen*t have the lowest obesity rate (0.160), while those *permanently unable to work* exhibit the highest rate (0.426).
 
 Overall, the exploratory analysis highlights potential relationships between obesity prevalence and several demographic characteristics. These patterns will be formally tested in the following section using statistical modelling.
 
@@ -188,7 +184,7 @@ model1 <- glm(factor(Obese) ~ factor(Year), data = data, family = "binomial")
 model1 %>%
   tab_model(show.ci = F)
 ```
-The odds ratios of 0.99, 1.02, and 1.01 indicates the odds of being obese are estimated to increase by about 1% per year. Which is quite minimal. Additionally, the p-values of 0.913, 0.749, and 0.832 are much larger than the significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So, there is not enough statistical evidence to believe obesity prevalence changed between 2013 and 2016 based on the sample. 
+The odds ratios of 0.99, 1.02, and 1.01 indicates the odds of being obese are estimated to increase by about 1% per year. Which is quite minimal. Additionally, the p-values of 0.913, 0.749, and 0.832 are much larger than the chosen significance value $\alpha = 0.05$ meaning the effect is not statistically significant. So, there is not enough statistical evidence to believe obesity prevalence changed between 2013 and 2016 based on the sample. 
 
 To assess model fit and check assumptions, the following plots are made:
 ```{r}
@@ -220,7 +216,6 @@ model2 %>%
 
 The results from @tbl-model2 allow the odds to be compared for each predictor. The regression results indicate that age group is strongly associated with obesity risk, more specifically, the age groups 55-64 and 65-74 have the highest odds of being obese with odds ratios of 2.48 and 2.76 respectively compared with the 16-24 age group which has an odds ratio of 0.22. Differences between males and females are also observed, suggesting that gender may influence obesity prevalence where males have slightly lower odds of obesity compared to females, with an odds ratio of 0.9. Although small, the difference appears to be statistically significant, with a p-value less than 0.05. Employment status may also play a role in obesity prevalence, potentially reflecting differences in social-economic circumstances and lifestyle behaviors. Those looking after home/family or permanently unable to work had significantly higher obesity odds with odds ratios of 1.51 and 1.61. Otherwise, for the other employment categories, there appears to be no significant difference from the reference group. These results suggest age, gender, and some employment categories are associated with obesity, while select employment categories show non-significant effects. 
 
-To determine if the model fits the data well, the following plots are made:
 ```{r}
 #| label: fig-assump2
 #| fig-cap: "Final model diagnostic plots."
