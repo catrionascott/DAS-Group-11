@@ -227,5 +227,5 @@ The plots in @fig-assump2 assess the assumptions and fit of the logistic regress
 Since no assumptions appear to be violated, the logistic regression model appears to be a good fit for the data. 
 
 # Conclusions {#sec-con}
-The prevalence of diabetes in Scotland has not significantly changed between 2013 and 2016. *Age*, *employment*, and *gender* are associated with obesity. Where age groups 55-64 and 65-74 have the highest odds of being obese, men are less likely to be obese than women, and those looking after home/family or permanently unable to work also have higher odds of being obese. 
+The prevalence of diabetes in Scotland has not significantly changed between 2013 and 2016. Age, employment, and gender appear to have an statistically significant effect on obesity prevalence. The age groups *55-64* and *65-74* have the highest odds of obesity with odds ratios of 2.48 and 2.76. Men show larger odds of being obese, than women. Finally, those looking after home/family or permanently unable to work also have higher odds of being obese than the other employment categories with odds ratios of 1.51 and 1.61.  
 
